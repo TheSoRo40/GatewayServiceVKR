@@ -1,6 +1,6 @@
 package com.vedegiska.gateway_microservice.service.inter;
 
-import org.springframework.security.core.userdetails.User;
+import com.vedegiska.gateway_microservice.domain.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.Set;
