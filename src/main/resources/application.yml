@@ -1,0 +1,5 @@
+jwt:
+  secret: $78gr43g7g8feb8we
+  header_key: Authorization
+  expiration: 86400
+  prefix: Bearer
