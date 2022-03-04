@@ -6,7 +6,7 @@ import com.vedegiska.gateway_microservice.repo.RoleRepository;
 import com.vedegiska.gateway_microservice.repo.UserRepository;
 import com.vedegiska.gateway_microservice.service.inter.IAppUserDetailsService;
 import com.vedegiska.gateway_microservice.service.inter.ITokenAuthenticationService;
-import com.vedegiska.gateway_microservice.service.model.IAppUserDetailsServiceImpl;
+import com.vedegiska.gateway_microservice.service.model.AppUserDetailsService;
 import com.vedegiska.gateway_microservice.service.model.TokenAuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -33,7 +33,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     public IAppUserDetailsService appUserDetailsService() {
-        return new IAppUserDetailsServiceImpl(userRepository, roleRepository);
+        return new AppUserDetailsService(userRepository, roleRepository);
     }
 
     @Bean

@@ -7,4 +7,6 @@ import java.util.Set;
 
 public interface IAppUserDetailsService extends UserDetailsService {
     Long saveUser(User user, Set<String> roleStr);
+    User findUser(Long id);
+    User findUser(String email);
 }

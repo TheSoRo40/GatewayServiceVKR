@@ -2,6 +2,7 @@ package com.vedegiska.gateway_microservice.service.model;
 
 import com.vedegiska.gateway_microservice.domain.User;
 import com.vedegiska.gateway_microservice.exception.EmailAddressUnavailableException;
+import com.vedegiska.gateway_microservice.exception.InvalidUserException;
 import com.vedegiska.gateway_microservice.repo.RoleRepository;
 import com.vedegiska.gateway_microservice.repo.UserRepository;
 import com.vedegiska.gateway_microservice.service.inter.IAppUserDetailsService;
@@ -13,7 +14,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @RequiredArgsConstructor
-public class IAppUserDetailsServiceImpl implements IAppUserDetailsService {
+public class AppUserDetailsService implements IAppUserDetailsService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
 
@@ -31,9 +32,22 @@ public class IAppUserDetailsServiceImpl implements IAppUserDetailsService {
     }
 
     @Override
+    public User findUser(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new InvalidUserException("Can't find this user"));
+    }
+    //возможна ошибка
+    @Override
+    public User findUser(String email) {
+        return (User) loadUserByUsername(email);
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String username) {
         return userRepository.findByEmail(username)
                 .orElseThrow(() ->
                         new EmailAddressUnavailableException("Error. User with this email is not found"));
     }
+
+
 }

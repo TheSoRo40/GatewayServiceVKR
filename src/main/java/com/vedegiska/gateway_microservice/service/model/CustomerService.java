@@ -2,6 +2,8 @@ package com.vedegiska.gateway_microservice.service.model;
 
 import com.vedegiska.gateway_microservice.domain.User;
 import com.vedegiska.gateway_microservice.dto.CustomerFullVOToReg;
+import com.vedegiska.gateway_microservice.dto.CustomerVOFromService;
+import com.vedegiska.gateway_microservice.dto.CustomerVOFull;
 import com.vedegiska.gateway_microservice.dto.CustomerVOToRegForMainService;
 import com.vedegiska.gateway_microservice.enums.RoleEnum;
 import com.vedegiska.gateway_microservice.exception.MicroserviceConnectException;
@@ -11,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +47,52 @@ public class CustomerService implements ICustomerService {
             return generatedId;
         } else {
             throw new MicroserviceConnectException("Error to registration you");
+        }
+    }
+
+    @Override
+    public CustomerVOFull retrieveCustomerData(String email) {
+        User user = appUserDetailsService.findUser(email);
+        if (user.getRoles().stream().anyMatch(role -> role.getName().equals(RoleEnum.ROLE_CUSTOMER.toString()))) {
+            ResponseEntity<CustomerVOFromService> partOfCustomer = restTemplate
+                    .getForEntity(
+                            (baseUrl + "/customers/byemail/" + email),
+                            CustomerVOFromService.class
+                    );
+            return new CustomerVOFull(partOfCustomer.getBody(), email);
+        } else {
+            throw new IllegalArgumentException("User with wrong role");
+        }
+    }
+
+    @Override
+    public CustomerVOFull retrieveCustomerData(Long id) {
+        User user = appUserDetailsService.findUser(id);
+        if (user.getRoles().stream().anyMatch(role -> role.getName().equals(RoleEnum.ROLE_CUSTOMER.toString()))) {
+            ResponseEntity<CustomerVOFromService> partOfCustomer = restTemplate
+                    .getForEntity(
+                            (baseUrl + "/customers/" + id),
+                            CustomerVOFromService.class
+                    );
+            return new CustomerVOFull(partOfCustomer.getBody(), user.getEmail());
+        } else {
+            throw new IllegalArgumentException("User with wrong role");
+        }
+    }
+
+    @Override
+    public Integer changeCardPoints(Integer cardPoint, String email) {
+        User user = appUserDetailsService.findUser(email);
+        if (user.getRoles().stream().anyMatch(role -> role.getName().equals(RoleEnum.ROLE_CUSTOMER.toString()))) {
+            return restTemplate
+                    .exchange(
+                            (baseUrl + "/customers/changePoints/" + cardPoint),
+                            HttpMethod.PUT,
+                            null,
+                            Integer.class).
+                    getBody();
+        } else {
+            throw new IllegalArgumentException("User with wrong role");
         }
     }
 }
