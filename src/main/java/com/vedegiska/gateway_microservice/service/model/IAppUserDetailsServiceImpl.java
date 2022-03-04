@@ -7,7 +7,6 @@ import com.vedegiska.gateway_microservice.repo.UserRepository;
 import com.vedegiska.gateway_microservice.service.inter.IAppUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -19,12 +18,13 @@ public class IAppUserDetailsServiceImpl implements IAppUserDetailsService {
     private final RoleRepository roleRepository;
 
     @Override
-    public void saveUser(User user, Set<String> roleStr) {
+    public Long saveUser(User user, Set<String> roleStr) {
         Optional<User> isUserEmailAlready =
                 userRepository.findByEmail(user.getUsername());
         if (isUserEmailAlready.isEmpty()) {
             user.setRoles(roleRepository.findByNameIn(new HashSet<>(roleStr)));
             userRepository.save(user);
+            return user.getId(); //возможен Exception о том, что id не сгенерился
         } else {
             throw new EmailAddressUnavailableException("Error. User with this email already exist");
         }

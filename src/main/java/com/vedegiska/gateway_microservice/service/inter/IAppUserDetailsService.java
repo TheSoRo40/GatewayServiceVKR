@@ -6,5 +6,5 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import java.util.Set;
 
 public interface IAppUserDetailsService extends UserDetailsService {
-    void saveUser(User user, Set<String> roleStr);
+    Long saveUser(User user, Set<String> roleStr);
 }

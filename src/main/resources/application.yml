@@ -1,3 +1,7 @@
+main_server:
+  application:
+    base_url: http://whatever
+
 jwt:
   secret: $78gr43g7g8feb8we
   header_key: Authorization
