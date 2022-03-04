@@ -17,8 +17,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @Service
@@ -36,7 +39,9 @@ public class CustomerService implements ICustomerService {
         Set<String> roles = new HashSet<>();
         roles.add(RoleEnum.ROLE_CUSTOMER.toString());
         Long generatedId = appUserDetailsService.saveUser(user, roles);
-        HttpEntity<CustomerVOToRegForMainService> request = new HttpEntity<>(new CustomerVOToRegForMainService(customer.getMobile(), customer.getCustomer_name()));
+        HttpEntity<CustomerVOToRegForMainService> request = new HttpEntity<>(
+                new CustomerVOToRegForMainService(generatedId,
+                        customer.getMobile(), customer.getCustomer_name()));
         ResponseEntity<Long> getId = restTemplate.exchange(
                 (baseUrl + "/customers/registration"),
                 HttpMethod.POST,
@@ -54,12 +59,8 @@ public class CustomerService implements ICustomerService {
     public CustomerVOFull retrieveCustomerData(String email) {
         User user = appUserDetailsService.findUser(email);
         if (user.getRoles().stream().anyMatch(role -> role.getName().equals(RoleEnum.ROLE_CUSTOMER.toString()))) {
-            ResponseEntity<CustomerVOFromService> partOfCustomer = restTemplate
-                    .getForEntity(
-                            (baseUrl + "/customers/byemail/" + email),
-                            CustomerVOFromService.class
-                    );
-            return new CustomerVOFull(partOfCustomer.getBody(), email);
+            return getDetailAboutCustomer(user.getId(), user.getEmail());
+
         } else {
             throw new IllegalArgumentException("User with wrong role");
         }
@@ -69,12 +70,7 @@ public class CustomerService implements ICustomerService {
     public CustomerVOFull retrieveCustomerData(Long id) {
         User user = appUserDetailsService.findUser(id);
         if (user.getRoles().stream().anyMatch(role -> role.getName().equals(RoleEnum.ROLE_CUSTOMER.toString()))) {
-            ResponseEntity<CustomerVOFromService> partOfCustomer = restTemplate
-                    .getForEntity(
-                            (baseUrl + "/customers/" + id),
-                            CustomerVOFromService.class
-                    );
-            return new CustomerVOFull(partOfCustomer.getBody(), user.getEmail());
+            return getDetailAboutCustomer(user.getId(), user.getEmail());
         } else {
             throw new IllegalArgumentException("User with wrong role");
         }
@@ -84,15 +80,34 @@ public class CustomerService implements ICustomerService {
     public Integer changeCardPoints(Integer cardPoint, String email) {
         User user = appUserDetailsService.findUser(email);
         if (user.getRoles().stream().anyMatch(role -> role.getName().equals(RoleEnum.ROLE_CUSTOMER.toString()))) {
+            String urlTemplate = UriComponentsBuilder
+                    .fromHttpUrl(baseUrl + "/customers/changePoints")
+                    .queryParam("card_point", "{card_point}")
+                        .queryParam("customer_id", "{customer_id}")
+                    .encode()
+                    .toUriString();
+            Map<String, ? super Number> params = new HashMap<>();
+            params.put("card_point", cardPoint);
+            params.put("customer_id", user.getId());
             return restTemplate
                     .exchange(
-                            (baseUrl + "/customers/changePoints/" + cardPoint),
+                            urlTemplate,
                             HttpMethod.PUT,
                             null,
-                            Integer.class).
+                            Integer.class,
+                            params).
                     getBody();
         } else {
             throw new IllegalArgumentException("User with wrong role");
         }
+    }
+
+    private CustomerVOFull getDetailAboutCustomer(Long id, String email) {
+        ResponseEntity<CustomerVOFromService> partOfCustomer = restTemplate
+                .getForEntity(
+                        (baseUrl + "/customers/" + id),
+                        CustomerVOFromService.class
+                );
+        return new CustomerVOFull(partOfCustomer.getBody(), email);
     }
 }

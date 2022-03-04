@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CustomerVOToRegForMainService {
+    private Long id;
     private String mobile;
     private String customer_name;
 }
