@@ -29,8 +29,8 @@ import java.util.Set;
 public class CustomerService implements ICustomerService {
     private final RestTemplate restTemplate;
     private final IAppUserDetailsService appUserDetailsService;
-    @Value("${main_server.application.base_url}")
-    private String baseUrl;
+    @Value("${name_microservices.offer}")
+    private final String baseUrl;
 
     @Override
     @Transactional
@@ -60,7 +60,6 @@ public class CustomerService implements ICustomerService {
         User user = appUserDetailsService.findUser(email);
         if (user.getRoles().stream().anyMatch(role -> role.getName().equals(RoleEnum.ROLE_CUSTOMER.toString()))) {
             return getDetailAboutCustomer(user.getId(), user.getEmail());
-
         } else {
             throw new IllegalArgumentException("User with wrong role");
         }
@@ -77,13 +76,13 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
-    public Integer changeCardPoints(Integer cardPoint, String email) {
+    public Integer changeCardPoints(int cardPoint, String email) {
         User user = appUserDetailsService.findUser(email);
         if (user.getRoles().stream().anyMatch(role -> role.getName().equals(RoleEnum.ROLE_CUSTOMER.toString()))) {
             String urlTemplate = UriComponentsBuilder
                     .fromHttpUrl(baseUrl + "/customers/changePoints")
                     .queryParam("card_point", "{card_point}")
-                        .queryParam("customer_id", "{customer_id}")
+                    .queryParam("customer_id", "{customer_id}")
                     .encode()
                     .toUriString();
             Map<String, ? super Number> params = new HashMap<>();

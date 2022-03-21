@@ -4,9 +4,6 @@ import com.vedegiska.gateway_microservice.dto.CustomerFullVOToReg;
 import com.vedegiska.gateway_microservice.dto.CustomerVOFull;
 import com.vedegiska.gateway_microservice.service.inter.ICustomerService;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.connector.Response;
-import org.aspectj.weaver.ResolvedPointcutDefinition;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 

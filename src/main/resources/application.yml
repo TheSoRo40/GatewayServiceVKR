@@ -2,8 +2,21 @@ main_server:
   application:
     base_url: http://whatever
 
+name_microservices:
+  offer: OfferMicroservice
+  dishes: DishesMicroservice
+  workshop: WorkShopMicroservice
+
+server:
+  port: 8080
+
+spring:
+  application:
+    name: GatewayMicroservice
+
 jwt:
   secret: $78gr43g7g8feb8we
   header_key: Authorization
   expiration: 86400
   prefix: Bearer
+

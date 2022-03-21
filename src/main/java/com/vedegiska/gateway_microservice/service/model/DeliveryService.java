@@ -25,30 +25,27 @@ public class DeliveryService implements IDeliveryService {
     private String baseUrl;
 
     @Override
-    public Set<DeliveryVO> listDeliveriesByCourierId(Long courierId) {
+    public ResponseEntity<Object> listDeliveriesByCourierId(Long courierId) {
         User user = appUserDetailsService.findUser(courierId);
         if (user.getRoles().stream().anyMatch(role -> role.getName().equals(RoleEnum.ROLE_COURIER.toString()))) {
-            ParameterizedTypeReference<Set<DeliveryVO>> responseClass =
-                    new ParameterizedTypeReference<>() {};
-            ResponseEntity<Set<DeliveryVO>> deliveries = restTemplate
+            return restTemplate
                     .exchange(
                             (baseUrl + "/delivery/show/" + courierId),
                             HttpMethod.GET,
                             null,
-                            responseClass
+                            Object.class
                     );
-            return deliveries.getBody();
         } else {
             throw new IllegalArgumentException("User with wrong role");
         }
     }
 
     @Override
-    public OfferVO recreateDelivery(OfferVO offer) {
+    public ResponseEntity<Object> recreateDelivery(OfferVO offer) {
         return restTemplate.postForEntity(
                 (baseUrl + "/delivery/recreate"),
                 offer,
-                OfferVO.class
-        ).getBody();
+                Object.class
+        );
     }
 }

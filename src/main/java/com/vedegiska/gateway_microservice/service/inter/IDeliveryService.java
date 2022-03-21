@@ -1,11 +1,9 @@
 package com.vedegiska.gateway_microservice.service.inter;
 
-import com.vedegiska.gateway_microservice.dto.DeliveryVO;
 import com.vedegiska.gateway_microservice.dto.OfferVO;
-
-import java.util.Set;
+import org.springframework.http.ResponseEntity;
 
 public interface IDeliveryService {
-    Set<DeliveryVO> listDeliveriesByCourierId(Long courierId);
-    OfferVO recreateDelivery(OfferVO offer);
+    ResponseEntity<Object>  listDeliveriesByCourierId(Long courierId);
+    ResponseEntity<Object> recreateDelivery(OfferVO offer);
 }

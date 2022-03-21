@@ -4,11 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomerVOToRegForMainService {
-    private Long id;
-    private String mobile;
-    private String customerName;
+public class ListCouriersRequest {
+    private long restaurantId;
+    private Set<Long> courierIds;
 }

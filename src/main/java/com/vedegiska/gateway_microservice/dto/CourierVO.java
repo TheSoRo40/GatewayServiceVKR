@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomerVOToRegForMainService {
-    private Long id;
+public class CourierVO {
+    private long id;
+    private String fio;
     private String mobile;
-    private String customerName;
 }

@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CustomerVOFromService {
-    private Long customer_id;
+    private long customerId;
     private String mobile;
-    private Integer customer_card_num;
-    private Integer customer_card_point;
-    private String customer_name;
+    private long customerCardNum;
+    private int customerCardPoint;
+    private String customerName;
 }
