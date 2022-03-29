@@ -4,6 +4,7 @@ import com.vedegiska.gateway_microservice.dto.CustomerFullVOToReg;
 import com.vedegiska.gateway_microservice.dto.CustomerVOFull;
 import com.vedegiska.gateway_microservice.service.inter.ICustomerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,13 +18,13 @@ public class CustomerController {
 
     @PostMapping
     @RequestMapping("/registration")
-    public Long create(@Validated @RequestBody CustomerFullVOToReg customerDetails) {
+    public ResponseEntity<Object> create(@Validated @RequestBody CustomerFullVOToReg customerDetails) {
         return customerService.customerRegistration(customerDetails);
     }
 
     @PutMapping
     @RequestMapping("/changePoints/{card_point}")
-    public Integer changePoints(
+    public ResponseEntity<Object> changePoints(
             @PathVariable("card_point") Integer cardPoint, HttpServletRequest request) {
         return customerService.changeCardPoints(cardPoint, request.getUserPrincipal().getName());
     }

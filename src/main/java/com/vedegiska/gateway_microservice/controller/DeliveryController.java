@@ -1,13 +1,10 @@
 package com.vedegiska.gateway_microservice.controller;
 
-import com.vedegiska.gateway_microservice.dto.DeliveryVO;
 import com.vedegiska.gateway_microservice.dto.OfferVO;
 import com.vedegiska.gateway_microservice.service.inter.IDeliveryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Set;
 
 @RestController
 @RequestMapping("/delivery")

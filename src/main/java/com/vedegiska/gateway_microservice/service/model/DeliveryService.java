@@ -14,14 +14,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Set;
-
 @Service
 @RequiredArgsConstructor
 public class DeliveryService implements IDeliveryService {
     private final RestTemplate restTemplate;
     private final IAppUserDetailsService appUserDetailsService;
-    @Value("${main_server.application.base_url}")
+    @Value("${name_microservices.offer}")
     private String baseUrl;
 
     @Override

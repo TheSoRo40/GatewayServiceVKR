@@ -34,7 +34,7 @@ public class CustomerService implements ICustomerService {
 
     @Override
     @Transactional
-    public Long customerRegistration(CustomerFullVOToReg customer) {
+    public ResponseEntity<? super Object> customerRegistration(CustomerFullVOToReg customer) {
         User user = new User(customer.getEmail(), customer.getCustomer_password());
         Set<String> roles = new HashSet<>();
         roles.add(RoleEnum.ROLE_CUSTOMER.toString());
@@ -42,17 +42,11 @@ public class CustomerService implements ICustomerService {
         HttpEntity<CustomerVOToRegForMainService> request = new HttpEntity<>(
                 new CustomerVOToRegForMainService(generatedId,
                         customer.getMobile(), customer.getCustomer_name()));
-        ResponseEntity<Long> getId = restTemplate.exchange(
+        return restTemplate.postForEntity(
                 (baseUrl + "/customers/registration"),
-                HttpMethod.POST,
                 request,
-                Long.class
+                Object.class
         );
-        if (generatedId.equals(getId.getBody())) {
-            return generatedId;
-        } else {
-            throw new MicroserviceConnectException("Error to registration you");
-        }
     }
 
     @Override
@@ -76,26 +70,27 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
-    public Integer changeCardPoints(int cardPoint, String email) {
+    public ResponseEntity<? super Object> changeCardPoints(int cardPoint, String email) {
         User user = appUserDetailsService.findUser(email);
         if (user.getRoles().stream().anyMatch(role -> role.getName().equals(RoleEnum.ROLE_CUSTOMER.toString()))) {
+/*
             String urlTemplate = UriComponentsBuilder
                     .fromHttpUrl(baseUrl + "/customers/changePoints")
                     .queryParam("card_point", "{card_point}")
                     .queryParam("customer_id", "{customer_id}")
                     .encode()
                     .toUriString();
+            */
             Map<String, ? super Number> params = new HashMap<>();
             params.put("card_point", cardPoint);
             params.put("customer_id", user.getId());
             return restTemplate
                     .exchange(
-                            urlTemplate,
+                            (baseUrl + "/customers/changePoints"),
                             HttpMethod.PUT,
                             null,
-                            Integer.class,
-                            params).
-                    getBody();
+                            Object.class,
+                            params);
         } else {
             throw new IllegalArgumentException("User with wrong role");
         }
