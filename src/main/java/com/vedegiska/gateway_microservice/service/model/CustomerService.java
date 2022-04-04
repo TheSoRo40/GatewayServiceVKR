@@ -6,7 +6,6 @@ import com.vedegiska.gateway_microservice.dto.CustomerVOFromService;
 import com.vedegiska.gateway_microservice.dto.CustomerVOFull;
 import com.vedegiska.gateway_microservice.dto.CustomerVOToRegForMainService;
 import com.vedegiska.gateway_microservice.enums.RoleEnum;
-import com.vedegiska.gateway_microservice.exception.MicroserviceConnectException;
 import com.vedegiska.gateway_microservice.service.inter.IAppUserDetailsService;
 import com.vedegiska.gateway_microservice.service.inter.ICustomerService;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,20 +28,20 @@ public class CustomerService implements ICustomerService {
     private final RestTemplate restTemplate;
     private final IAppUserDetailsService appUserDetailsService;
     @Value("${name_microservices.offer}")
-    private final String baseUrl;
+    private String baseUrl;
 
     @Override
     @Transactional
     public ResponseEntity<? super Object> customerRegistration(CustomerFullVOToReg customer) {
-        User user = new User(customer.getEmail(), customer.getCustomer_password());
+        User user = new User(customer.getEmail(), customer.getCustomerPassword());
         Set<String> roles = new HashSet<>();
         roles.add(RoleEnum.ROLE_CUSTOMER.toString());
         Long generatedId = appUserDetailsService.saveUser(user, roles);
         HttpEntity<CustomerVOToRegForMainService> request = new HttpEntity<>(
                 new CustomerVOToRegForMainService(generatedId,
-                        customer.getMobile(), customer.getCustomer_name()));
+                        customer.getMobile(), customer.getCustomerName()));
         return restTemplate.postForEntity(
-                (baseUrl + "/customers/registration"),
+                ("http://" + baseUrl + "/customers/registration"),
                 request,
                 Object.class
         );
@@ -86,7 +84,7 @@ public class CustomerService implements ICustomerService {
             params.put("customer_id", user.getId());
             return restTemplate
                     .exchange(
-                            (baseUrl + "/customers/changePoints"),
+                            ("http://" + baseUrl + "/customers/changePoints"),
                             HttpMethod.PUT,
                             null,
                             Object.class,
@@ -99,7 +97,7 @@ public class CustomerService implements ICustomerService {
     private CustomerVOFull getDetailAboutCustomer(Long id, String email) {
         ResponseEntity<CustomerVOFromService> partOfCustomer = restTemplate
                 .getForEntity(
-                        (baseUrl + "/customers/" + id),
+                        ("http://" + baseUrl + "/customers/" + id),
                         CustomerVOFromService.class
                 );
         return new CustomerVOFull(partOfCustomer.getBody(), email);

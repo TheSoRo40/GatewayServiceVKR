@@ -1,13 +1,11 @@
 package com.vedegiska.gateway_microservice.controller;
 
-import com.vedegiska.gateway_microservice.dto.Dish2OfferVO;
 import com.vedegiska.gateway_microservice.dto.OfferVOCreate;
 import com.vedegiska.gateway_microservice.service.inter.IDish2OfferService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/dish2offer")

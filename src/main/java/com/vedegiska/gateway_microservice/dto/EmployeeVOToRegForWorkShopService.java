@@ -7,5 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RestaurantVO {
+public class EmployeeVOToRegForWorkShopService {
+    private long id;
+    private String fio;
+    private String mobile;
+    private long restaurant;
 }

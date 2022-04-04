@@ -18,7 +18,7 @@ public class Dish2OfferService implements IDish2OfferService {
     @Override
     public ResponseEntity<? super Object> getTrash(long offerId) {
         return restTemplate.getForEntity(
-                (baseUrlDishes + "/dish2offer/get_trash/" + offerId),
+                ("http://" + baseUrlDishes + "/dish2offer/get_trash/" + offerId),
                 Object.class
         );
     }
@@ -26,7 +26,7 @@ public class Dish2OfferService implements IDish2OfferService {
     @Override
     public ResponseEntity<Void> addDishesToCreatingOffer(OfferVOCreate request) {
         return restTemplate.postForEntity(
-                (baseUrlDishes + "/dish2offer/add_products"),
+                ("http://" + baseUrlDishes + "/dish2offer/add_products"),
                 request,
                 Void.class
         );

@@ -23,7 +23,7 @@ public class CustomerController {
     }
 
     @PutMapping
-    @RequestMapping("/changePoints/{card_point}")
+    @RequestMapping("/change_points/{card_point}")
     public ResponseEntity<Object> changePoints(
             @PathVariable("card_point") Integer cardPoint, HttpServletRequest request) {
         return customerService.changeCardPoints(cardPoint, request.getUserPrincipal().getName());

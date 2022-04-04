@@ -26,12 +26,6 @@ public class OfferController {
         return offerService.changeStatusToWaiting(offerVO);
     }
 
-    @PostMapping
-    @RequestMapping("/create_offer/{customer_id}")
-    public ResponseEntity<Object> createOffer(@PathVariable("customer_id") long customerId) {
-        return offerService.getTrashOffer(customerId);
-    }
-
     @GetMapping
     @RequestMapping("/list_offers")
     public ResponseEntity<Object> list() {

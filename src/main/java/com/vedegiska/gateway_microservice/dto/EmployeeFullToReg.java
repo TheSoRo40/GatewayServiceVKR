@@ -7,9 +7,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomerFullVOToReg {
+public class EmployeeFullToReg {
     private String email;
-    private String customerPassword;
+    private String password;
     private String mobile;
-    private String customerName;
+    private String name;
+    private long restaurantId;
+    private String role;
 }

@@ -16,12 +16,12 @@ import java.util.Map;
 public class RestaurantService implements IRestaurantService {
     private final RestTemplate restTemplate;
     @Value("${name_microservices.workshop}")
-    private final String baseUrl;
+    private String baseUrl;
 
     @Override
     public ResponseEntity<? super Object> listRestaurants() {
         return restTemplate.getForEntity(
-                (baseUrl + "/restaurant/all"),
+                ("http://" + baseUrl + "/restaurant/all"),
                 Object.class
         );
     }
@@ -29,7 +29,7 @@ public class RestaurantService implements IRestaurantService {
     @Override
     public ResponseEntity<? super Object> nearestRestaurantFromAddress(double locationX, double locationY) {
         String urlTemplate = UriComponentsBuilder
-                .fromHttpUrl(baseUrl + "/restaurants/nearest")
+                .fromHttpUrl("http://" + baseUrl + "/restaurants/nearest")
                 .queryParam("lat", "{lat}")
                 .queryParam("lng", "{lng}")
                 .encode()

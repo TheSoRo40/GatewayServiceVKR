@@ -20,7 +20,7 @@ public class OfferService implements IOfferService {
     @Override
     public ResponseEntity<Object> changeStatusOnly(OfferVOChangeStatus offerVO) {
         return restTemplate.postForEntity(
-                (baseUrl + "/offer/change_status"),
+                ("http://" + baseUrl + "/offer/change_status"),
                 offerVO,
                 Object.class
         );
@@ -29,7 +29,7 @@ public class OfferService implements IOfferService {
     @Override
     public ResponseEntity<Object> changeStatusToWaiting(OfferVOMakingStatus offerVO) {
         return restTemplate.postForEntity(
-                (baseUrl + "/offer/making_offer"),
+                ("http://" + baseUrl + "/offer/making_offer"),
                 offerVO,
                 Object.class
         );
@@ -38,7 +38,7 @@ public class OfferService implements IOfferService {
     @Override
     public ResponseEntity<Object> changeStatusToComplete(Long offerId) {
         return restTemplate.getForEntity(
-                (baseUrl + "/offer/complete_offer/" + offerId),
+                ("http://" + baseUrl + "/offer/complete_offer/" + offerId),
                 Object.class
         );
     }
@@ -46,7 +46,7 @@ public class OfferService implements IOfferService {
     @Override
     public ResponseEntity<Object> listOffers() {
         return restTemplate.getForEntity(
-                (baseUrl + "/offer/list_offers"),
+                ("http://" + baseUrl + "/offer/list_offers"),
                 Object.class
         );
     }
@@ -54,7 +54,7 @@ public class OfferService implements IOfferService {
     @Override
     public ResponseEntity<Object> deliveryStatusOffer(OfferVODeliveryStatus offerVO) {
         return restTemplate.getForEntity(
-                (baseUrl + "/offer/list_offers"),
+                ("http://" + baseUrl + "/offer/list_offers"),
                 Object.class
         );
     }
@@ -62,7 +62,7 @@ public class OfferService implements IOfferService {
     @Override
     public ResponseEntity<Object> getCurrentStatusOffer(Long offerId) {
         return restTemplate.getForEntity(
-                (baseUrl + "/offer/get_current_status/" + offerId),
+                ("http://" + baseUrl + "/offer/get_current_status/" + offerId),
                 Object.class
         );
     }

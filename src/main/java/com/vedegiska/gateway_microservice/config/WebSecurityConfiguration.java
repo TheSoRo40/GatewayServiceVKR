@@ -42,7 +42,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     //возможна ошибка в работе фильтров из-за объявления их как бинов
-    @Bean
+    /*@Bean
     public JWTLoginFilter jwtLoginFilter() throws Exception {
         return new JWTLoginFilter(authenticationManagerBean(),
                 tokenAuthenticationService());
@@ -51,7 +51,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     public JWTAuthenticationFilter jwtAuthenticationFilter() {
         return new JWTAuthenticationFilter(tokenAuthenticationService());
-    }
+    }*/
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -62,15 +62,15 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/customer/registration")
+                .antMatchers("/customers/registration")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
-                .addFilterBefore(jwtLoginFilter(), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-                //.addFilterBefore(new JWLoginFilter(authenticationManagerBean(), tokenAuthenticationService()), UsernamePasswordAuthenticationFilter.class)
-                //.addFilterBefore(new JWTAuthenticationFilter(tokenAuthenticationService()), UsernamePasswordAuthenticationFilter.class);
+                //.addFilterBefore(jwtLoginFilter(), UsernamePasswordAuthenticationFilter.class)
+                //.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JWTLoginFilter(authenticationManagerBean(), tokenAuthenticationService()), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JWTAuthenticationFilter(tokenAuthenticationService()), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override

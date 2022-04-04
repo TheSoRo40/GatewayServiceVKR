@@ -12,12 +12,12 @@ import org.springframework.web.client.RestTemplate;
 public class DishService implements IDishService {
     private final RestTemplate restTemplate;
     @Value("${name_microservices.dishes}")
-    private final String baseUrl;
+    private String baseUrl;
 
     @Override
     public ResponseEntity<? super Object> getDishesMenu() {
         return restTemplate.getForEntity(
-                (baseUrl + "/dishes"),
+                ("http://" + baseUrl + "/dishes"),
                 Object.class
         );
     }
